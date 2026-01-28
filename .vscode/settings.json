@@ -1,7 +1,12 @@
 {
+  "terminal.integrated.env.windows": {
+    "PATH": "C:\\Program Files\\nodejs;${env:PATH}"
+  }
+}
+{
     "builder.serverUrl": "http://localhost:8080/",
     "builder.command": "npm run dev",
-    "builder.runDevServer": false,
-    "builder.autoDetectDevServer": false,
-    "builder.launchType": "editor"
+    "builder.runDevServer": true,
+    "builder.autoDetectDevServer": true,
+    "builder.launchType": "desktop"
 }

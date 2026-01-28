@@ -14,6 +14,7 @@ import {
 import { PortfolioContent } from '@/hooks/usePortfolioContent';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { isVideoUrl } from '@/utils/mediaUtils';
 
 interface ContentFormProps {
   initialData?: PortfolioContent | null;
@@ -157,11 +158,22 @@ const ContentForm = ({ initialData, contentType, onSubmit, onCancel }: ContentFo
         <div className="space-y-3">
           {formData.media_url && (
             <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
-              <img
-                src={formData.media_url}
-                alt="Preview"
-                className="w-full h-full object-cover"
-              />
+              {formData.type === 'video' && isVideoUrl(formData.media_url) ? (
+                <video
+                  src={formData.media_url}
+                  controls
+                  controlsList="nodownload"
+                  crossOrigin="anonymous"
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                />
+              ) : (
+                <img
+                  src={formData.media_url}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+              )}
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, media_url: '' }))}

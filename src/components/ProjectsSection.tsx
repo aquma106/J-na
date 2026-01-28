@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, Play, Award, Globe, X, Loader2 } from 'lucide-react';
 import { usePortfolioContent, PortfolioContent } from '@/hooks/usePortfolioContent';
+import { isVideoUrl } from '@/utils/mediaUtils';
 
 // Fallback certificate images for migration
 import awsCert from '@/assets/certificates/aws-solutions-architecture.png';
@@ -219,14 +220,25 @@ const ProjectsSection = () => {
                   onClick={() => setSelectedProject(project)}
                   className="project-card glass rounded-xl overflow-hidden text-left clickable group transition-all duration-500 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10"
                 >
-                  {/* Project Image/Placeholder */}
+                  {/* Project Image/Video/Placeholder */}
                   <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-muted to-secondary">
                     {project.image ? (
-                      <img 
-                        src={project.image} 
-                        alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                      project.category === 'video' && isVideoUrl(project.image) ? (
+                        <video
+                          src={project.image}
+                          controls
+                          controlsList="nodownload"
+                          crossOrigin="anonymous"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      )
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-primary/50 group-hover:scale-110 transition-transform duration-500">
@@ -335,11 +347,22 @@ const ProjectsSection = () => {
               >
                 <div className="aspect-video relative bg-gradient-to-br from-muted to-secondary overflow-hidden">
                   {selectedProject.image ? (
-                    <img 
-                      src={selectedProject.image} 
-                      alt={selectedProject.title}
-                      className="w-full h-full object-cover"
-                    />
+                    selectedProject.category === 'video' && isVideoUrl(selectedProject.image) ? (
+                      <video
+                        src={selectedProject.image}
+                        controls
+                        controlsList="nodownload"
+                        crossOrigin="anonymous"
+                        className="w-full h-full object-cover"
+                        preload="metadata"
+                      />
+                    ) : (
+                      <img
+                        src={selectedProject.image}
+                        alt={selectedProject.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-6xl text-primary/30">

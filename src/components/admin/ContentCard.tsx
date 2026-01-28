@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Edit2, Trash2, Eye, EyeOff, ExternalLink, Award, Play, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PortfolioContent } from '@/hooks/usePortfolioContent';
+import { isVideoUrl } from '@/utils/mediaUtils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,11 +48,22 @@ const ContentCard = ({ content, onEdit, onDelete, onToggleVisibility }: ContentC
       {/* Media Preview */}
       <div className="aspect-video relative bg-muted overflow-hidden">
         {content.media_url ? (
-          <img 
-            src={content.media_url} 
-            alt={content.title}
-            className="w-full h-full object-cover"
-          />
+          content.type === 'video' && isVideoUrl(content.media_url) ? (
+            <video
+              src={content.media_url}
+              controls
+              controlsList="nodownload"
+              crossOrigin="anonymous"
+              className="w-full h-full object-cover"
+              preload="metadata"
+            />
+          ) : (
+            <img
+              src={content.media_url}
+              alt={content.title}
+              className="w-full h-full object-cover"
+            />
+          )
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
             {getCategoryIcon()}
